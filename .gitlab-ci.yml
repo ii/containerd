@@ -39,17 +39,12 @@ compile:
     - cd /tmp/criu-3.0
     - sudo make install-criu
     - cd /go/src/github.com/containerd/containerd
-    - ls -la
-    - echo not running git-validation -- GIT_CHECK_EXCLUDE="./vendor" make dco
-    - make -j $(getconf _NPROCESSORS_ONLN) fmt || sleep 99999
-    - make -j $(getconf _NPROCESSORS_ONLN) vet || sleep 99999
-    - make -j $(getconf _NPROCESSORS_ONLN) build || sleep 99999
-    - make -j $(getconf _NPROCESSORS_ONLN) binaries || sleep 99999
-    - sleep 99999
+    - make -j $(getconf _NPROCESSORS_ONLN) || sleep 99999
   artifacts:
     name: "${CI_JOB_NAME}_${CI_COMMIT_REF_NAME}"
-    untracked: true
     expire_in: 4 weeks
+    paths:
+      - bin
 
 
 release:
