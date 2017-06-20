@@ -14,7 +14,7 @@ compile:
     CGO_ENABLED: '0'
     GOOS: linux
   script:
-    - apt-get update ; apt-get install unzip sudo protobuf-compiler protobuf-c-compiler
+    - apt-get update ; apt-get install -y unzip sudo protobuf-compiler protobuf-c-compiler
     - wget https://github.com/google/protobuf/releases/download/v3.1.0/protoc-3.1.0-linux-x86_64.zip -O /tmp/protoc-3.1.0-linux-x86_64.zip
     - unzip -o -d /tmp/protobuf /tmp/protoc-3.1.0-linux-x86_64.zip
     - export PATH=$PATH:/tmp/protobuf/bin/
