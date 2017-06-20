@@ -5,6 +5,7 @@ stages:
 before_script:
   - echo $GOPATH
   - ln -s /builds /go/src/github.com
+  - ln -s /go/src/containerd/containerd /go/src/github.com/docker/containerd
   - cd /go/src/github.com/containerd/containerd
 
 compile:
