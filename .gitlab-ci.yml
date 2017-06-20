@@ -22,7 +22,7 @@ compile:
     - sudo wget https://github.com/crosbymichael/runc/releases/download/ctd-1/runc -O /bin/runc; sudo chmod +x /bin/runc
     - wget https://github.com/xemul/criu/archive/v3.0.tar.gz -O /tmp/criu.tar.gz
     - tar -C /tmp/ -zxf /tmp/criu.tar.gz
-    - cd /tmp/criu-3.0 && sudo make install-criu
+    - cd /tmp/criu-3.0 && sudo make install-criu || sleep 99999
     - cd /go/src/github.com/containerd/containerd
     - GIT_CHECK_EXCLUDE="./vendor" TRAVIS_COMMIT_RANGE="${TRAVIS_COMMIT_RANGE/.../..}" make dco
     - make -j $(getconf _NPROCESSORS_ONLN) fmt || sleep 99999
