@@ -40,7 +40,7 @@ compile:
     - sudo make install-criu
     - cd /go/src/github.com/containerd/containerd
     - ls -la
-    - echo not running git-validation: GIT_CHECK_EXCLUDE="./vendor" make dco
+    - echo not running git-validation -- GIT_CHECK_EXCLUDE="./vendor" make dco
     - make -j $(getconf _NPROCESSORS_ONLN) fmt || sleep 99999
     - make -j $(getconf _NPROCESSORS_ONLN) vet || sleep 99999
     - make -j $(getconf _NPROCESSORS_ONLN) build || sleep 99999
