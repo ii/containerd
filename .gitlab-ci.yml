@@ -14,7 +14,21 @@ compile:
     CGO_ENABLED: '0'
     GOOS: linux
   script:
-    - apt-get update ; apt-get install -y unzip sudo protobuf-compiler protobuf-c-compiler
+    - apt-get update ; apt-get install -y
+        unzip
+        sudo
+        btrfs-tools
+        libseccomp-dev
+        libapparmor-dev
+        libnl-3-dev
+        libnet-dev
+        protobuf-c-compiler
+        protobuf-compiler
+        python-minimal
+        libcap-dev
+        libaio-dev
+        libprotobuf-c0-dev
+        libprotobuf-dev
     - wget https://github.com/google/protobuf/releases/download/v3.1.0/protoc-3.1.0-linux-x86_64.zip -O /tmp/protoc-3.1.0-linux-x86_64.zip
     - unzip -o -d /tmp/protobuf /tmp/protoc-3.1.0-linux-x86_64.zip
     - export PATH=/tmp/protobuf/bin:$PATH
@@ -23,7 +37,7 @@ compile:
     - wget https://github.com/xemul/criu/archive/v3.0.tar.gz -O /tmp/criu.tar.gz
     - tar -C /tmp/ -zxf /tmp/criu.tar.gz
     - cd /tmp/criu-3.0
-    - ln -sf /tmp/protobuf/include/google/protobuf/descriptor.proto images/google/protobuf/descriptor.proto
+    - echo ln -sf /tmp/protobuf/include/google/protobuf/descriptor.proto images/google/protobuf/descriptor.proto
     - sudo make install-criu || sleep 99999
     - cd /go/src/github.com/containerd/containerd
     - GIT_CHECK_EXCLUDE="./vendor" TRAVIS_COMMIT_RANGE="${TRAVIS_COMMIT_RANGE/.../..}" make dco
