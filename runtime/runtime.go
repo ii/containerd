@@ -44,6 +44,8 @@ type CreateOpts struct {
 	Checkpoint string
 	// Options for the runtime and container
 	Options *types.Any
+	// Runtime to use
+	Runtime string
 }
 
 // Exit information for a process
