@@ -47,7 +47,6 @@ type Task struct {
 	cg        cgroups.Cgroup
 	monitor   runtime.TaskMonitor
 	events    *exchange.Exchange
-	runtime   *runc.Runc
 }
 
 func newTask(id, namespace string, pid int, shim *client.Client, monitor runtime.TaskMonitor, events *exchange.Exchange, runtime *runc.Runc) (*Task, error) {
@@ -69,7 +68,6 @@ func newTask(id, namespace string, pid int, shim *client.Client, monitor runtime
 		cg:        cg,
 		monitor:   monitor,
 		events:    events,
-		runtime:   runtime,
 	}, nil
 }
 
