@@ -11,20 +11,24 @@ import (
 	"strings"
 	"time"
 
+	eventstypes "github.com/containerd/containerd/api/events"
 	"github.com/containerd/containerd/api/types"
+	"github.com/containerd/containerd/errdefs"
+	"github.com/containerd/containerd/events/exchange"
+	"github.com/containerd/containerd/log"
 	"github.com/containerd/containerd/namespaces"
 	"github.com/containerd/containerd/runtime"
 	"github.com/containerd/containerd/runtime/v2/task"
 	"github.com/containerd/containerd/sys"
 	"github.com/containerd/ttrpc"
-	"github.com/docker/swarmkit/log"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/sys/unix"
 )
 
 const shimBinaryFormat = "containerd-shim-%s"
 
 // NewShim starts and returns a new shim
-func NewShim(ctx context.Context, bundle *Bundle, runtime, containerdAddress string) (_ *Shim, err error) {
+func NewShim(ctx context.Context, bundle *Bundle, runtime, containerdAddress string, events *exchange.Exchange) (_ *Shim, err error) {
 	address, err := abstractAddress(ctx, bundle.ID)
 	if err != nil {
 		return nil, err
@@ -79,6 +83,7 @@ func NewShim(ctx context.Context, bundle *Bundle, runtime, containerdAddress str
 		client:  client,
 		task:    task.NewTaskClient(client),
 		shimPid: cmd.Process.Pid,
+		events:  events,
 	}, nil
 }
 
@@ -88,6 +93,13 @@ type Shim struct {
 	task    task.TaskClient
 	shimPid int
 	taskPid int
+	events  *exchange.Exchange
+}
+
+func (s *Shim) kill() error {
+	if err := unix.Kill(s.shimPid, unix.SIGTERM); err != nil {
+		return err
+	}
 }
 
 // ID of the shim/task
@@ -97,6 +109,30 @@ func (s *Shim) ID() string {
 
 func (s *Shim) Close() error {
 	return s.client.Close()
+}
+
+func (s *Shim) Delete(ctx context.Context) (*runtime.Exit, error) {
+	response, err := s.task.Delete(ctx, empty)
+	if err != nil {
+		return nil, errdefs.FromGRPC(err)
+	}
+	if err := s.kill(); err != nil {
+		return nil, err
+	}
+	if err := s.bundle.Delete(); err != nil {
+		return nil, err
+	}
+	s.events.Publish(ctx, runtime.TaskDeleteEventTopic, &eventstypes.TaskDelete{
+		ContainerID: s.ID(),
+		ExitStatus:  response.ExitStatus,
+		ExitedAt:    response.ExitedAt,
+		Pid:         response.Pid,
+	})
+	return &runtime.Exit{
+		Status:    response.ExitStatus,
+		Timestamp: response.ExitedAt,
+		Pid:       response.Pid,
+	}, nil
 }
 
 func (s *Shim) Create(ctx context.Context, opts runtime.CreateOpts) (Task, error) {
@@ -119,10 +155,20 @@ func (s *Shim) Create(ctx context.Context, opts runtime.CreateOpts) (Task, error
 	}
 	response, err := s.task.Create(ctx, request)
 	if err != nil {
-		return nil, err
+		return nil, errdefs.FromGRPC(err)
 	}
 	s.taskPid = int(response.Pid)
 	return s, nil
+}
+
+func (s *Shim) Pause(ctx context.Context) error {
+	if _, err := t.task.Pause(ctx, empty); err != nil {
+		return errdefs.FromGRPC(err)
+	}
+	s.events.Publish(ctx, runtime.TaskPausedEventTopic, &eventstypes.TaskPaused{
+		ContainerID: s.ID(),
+	})
+	return nil
 }
 
 func shimCommand(ctx context.Context, runtime, containerdAddress string, bundle *Bundle) (*exec.Cmd, error) {

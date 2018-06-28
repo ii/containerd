@@ -43,13 +43,13 @@ import containerd_v1_types "github.com/containerd/containerd/api/types/task"
 
 import time "time"
 
-import context "golang.org/x/net/context"
-import grpc "google.golang.org/grpc"
-
 import types "github.com/gogo/protobuf/types"
 
 import strings "strings"
 import reflect "reflect"
+
+import context "context"
+import ttrpc "github.com/stevvooe/ttrpc"
 
 import io "io"
 
@@ -270,541 +270,6 @@ func init() {
 	proto.RegisterType((*WaitRequest)(nil), "containerd.task.v2.WaitRequest")
 	proto.RegisterType((*WaitResponse)(nil), "containerd.task.v2.WaitResponse")
 }
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConn
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
-
-// Client API for Task service
-
-type TaskClient interface {
-	State(ctx context.Context, in *StateRequest, opts ...grpc.CallOption) (*StateResponse, error)
-	Create(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
-	Start(ctx context.Context, in *StartRequest, opts ...grpc.CallOption) (*StartResponse, error)
-	Delete(ctx context.Context, in *google_protobuf1.Empty, opts ...grpc.CallOption) (*DeleteResponse, error)
-	DeleteProcess(ctx context.Context, in *DeleteProcessRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
-	Pids(ctx context.Context, in *PidsRequest, opts ...grpc.CallOption) (*PidsResponse, error)
-	Pause(ctx context.Context, in *google_protobuf1.Empty, opts ...grpc.CallOption) (*google_protobuf1.Empty, error)
-	Resume(ctx context.Context, in *google_protobuf1.Empty, opts ...grpc.CallOption) (*google_protobuf1.Empty, error)
-	Checkpoint(ctx context.Context, in *CheckpointTaskRequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error)
-	Kill(ctx context.Context, in *KillRequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error)
-	Exec(ctx context.Context, in *ExecProcessRequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error)
-	ResizePty(ctx context.Context, in *ResizePtyRequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error)
-	CloseIO(ctx context.Context, in *CloseIORequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error)
-	Update(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error)
-	Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*WaitResponse, error)
-}
-
-type taskClient struct {
-	cc *grpc.ClientConn
-}
-
-func NewTaskClient(cc *grpc.ClientConn) TaskClient {
-	return &taskClient{cc}
-}
-
-func (c *taskClient) State(ctx context.Context, in *StateRequest, opts ...grpc.CallOption) (*StateResponse, error) {
-	out := new(StateResponse)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/State", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) Create(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error) {
-	out := new(CreateTaskResponse)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/Create", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) Start(ctx context.Context, in *StartRequest, opts ...grpc.CallOption) (*StartResponse, error) {
-	out := new(StartResponse)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/Start", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) Delete(ctx context.Context, in *google_protobuf1.Empty, opts ...grpc.CallOption) (*DeleteResponse, error) {
-	out := new(DeleteResponse)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/Delete", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) DeleteProcess(ctx context.Context, in *DeleteProcessRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
-	out := new(DeleteResponse)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/DeleteProcess", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) Pids(ctx context.Context, in *PidsRequest, opts ...grpc.CallOption) (*PidsResponse, error) {
-	out := new(PidsResponse)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/Pids", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) Pause(ctx context.Context, in *google_protobuf1.Empty, opts ...grpc.CallOption) (*google_protobuf1.Empty, error) {
-	out := new(google_protobuf1.Empty)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/Pause", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) Resume(ctx context.Context, in *google_protobuf1.Empty, opts ...grpc.CallOption) (*google_protobuf1.Empty, error) {
-	out := new(google_protobuf1.Empty)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/Resume", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) Checkpoint(ctx context.Context, in *CheckpointTaskRequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error) {
-	out := new(google_protobuf1.Empty)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/Checkpoint", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) Kill(ctx context.Context, in *KillRequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error) {
-	out := new(google_protobuf1.Empty)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/Kill", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) Exec(ctx context.Context, in *ExecProcessRequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error) {
-	out := new(google_protobuf1.Empty)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/Exec", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) ResizePty(ctx context.Context, in *ResizePtyRequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error) {
-	out := new(google_protobuf1.Empty)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/ResizePty", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) CloseIO(ctx context.Context, in *CloseIORequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error) {
-	out := new(google_protobuf1.Empty)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/CloseIO", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) Update(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*google_protobuf1.Empty, error) {
-	out := new(google_protobuf1.Empty)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/Update", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskClient) Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*WaitResponse, error) {
-	out := new(WaitResponse)
-	err := grpc.Invoke(ctx, "/containerd.task.v2.Task/Wait", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// Server API for Task service
-
-type TaskServer interface {
-	State(context.Context, *StateRequest) (*StateResponse, error)
-	Create(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
-	Start(context.Context, *StartRequest) (*StartResponse, error)
-	Delete(context.Context, *google_protobuf1.Empty) (*DeleteResponse, error)
-	DeleteProcess(context.Context, *DeleteProcessRequest) (*DeleteResponse, error)
-	Pids(context.Context, *PidsRequest) (*PidsResponse, error)
-	Pause(context.Context, *google_protobuf1.Empty) (*google_protobuf1.Empty, error)
-	Resume(context.Context, *google_protobuf1.Empty) (*google_protobuf1.Empty, error)
-	Checkpoint(context.Context, *CheckpointTaskRequest) (*google_protobuf1.Empty, error)
-	Kill(context.Context, *KillRequest) (*google_protobuf1.Empty, error)
-	Exec(context.Context, *ExecProcessRequest) (*google_protobuf1.Empty, error)
-	ResizePty(context.Context, *ResizePtyRequest) (*google_protobuf1.Empty, error)
-	CloseIO(context.Context, *CloseIORequest) (*google_protobuf1.Empty, error)
-	Update(context.Context, *UpdateTaskRequest) (*google_protobuf1.Empty, error)
-	Wait(context.Context, *WaitRequest) (*WaitResponse, error)
-}
-
-func RegisterTaskServer(s *grpc.Server, srv TaskServer) {
-	s.RegisterService(&_Task_serviceDesc, srv)
-}
-
-func _Task_State_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).State(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/State",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).State(ctx, req.(*StateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateTaskRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).Create(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/Create",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).Create(ctx, req.(*CreateTaskRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_Start_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StartRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).Start(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/Start",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).Start(ctx, req.(*StartRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(google_protobuf1.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).Delete(ctx, req.(*google_protobuf1.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_DeleteProcess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteProcessRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).DeleteProcess(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/DeleteProcess",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).DeleteProcess(ctx, req.(*DeleteProcessRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_Pids_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PidsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).Pids(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/Pids",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).Pids(ctx, req.(*PidsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_Pause_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(google_protobuf1.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).Pause(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/Pause",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).Pause(ctx, req.(*google_protobuf1.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_Resume_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(google_protobuf1.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).Resume(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/Resume",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).Resume(ctx, req.(*google_protobuf1.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_Checkpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CheckpointTaskRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).Checkpoint(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/Checkpoint",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).Checkpoint(ctx, req.(*CheckpointTaskRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_Kill_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(KillRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).Kill(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/Kill",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).Kill(ctx, req.(*KillRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_Exec_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExecProcessRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).Exec(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/Exec",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).Exec(ctx, req.(*ExecProcessRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_ResizePty_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ResizePtyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).ResizePty(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/ResizePty",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).ResizePty(ctx, req.(*ResizePtyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_CloseIO_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CloseIORequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).CloseIO(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/CloseIO",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).CloseIO(ctx, req.(*CloseIORequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateTaskRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).Update(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/Update",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).Update(ctx, req.(*UpdateTaskRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Task_Wait_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(WaitRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServer).Wait(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/containerd.task.v2.Task/Wait",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServer).Wait(ctx, req.(*WaitRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _Task_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "containerd.task.v2.Task",
-	HandlerType: (*TaskServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "State",
-			Handler:    _Task_State_Handler,
-		},
-		{
-			MethodName: "Create",
-			Handler:    _Task_Create_Handler,
-		},
-		{
-			MethodName: "Start",
-			Handler:    _Task_Start_Handler,
-		},
-		{
-			MethodName: "Delete",
-			Handler:    _Task_Delete_Handler,
-		},
-		{
-			MethodName: "DeleteProcess",
-			Handler:    _Task_DeleteProcess_Handler,
-		},
-		{
-			MethodName: "Pids",
-			Handler:    _Task_Pids_Handler,
-		},
-		{
-			MethodName: "Pause",
-			Handler:    _Task_Pause_Handler,
-		},
-		{
-			MethodName: "Resume",
-			Handler:    _Task_Resume_Handler,
-		},
-		{
-			MethodName: "Checkpoint",
-			Handler:    _Task_Checkpoint_Handler,
-		},
-		{
-			MethodName: "Kill",
-			Handler:    _Task_Kill_Handler,
-		},
-		{
-			MethodName: "Exec",
-			Handler:    _Task_Exec_Handler,
-		},
-		{
-			MethodName: "ResizePty",
-			Handler:    _Task_ResizePty_Handler,
-		},
-		{
-			MethodName: "CloseIO",
-			Handler:    _Task_CloseIO_Handler,
-		},
-		{
-			MethodName: "Update",
-			Handler:    _Task_Update_Handler,
-		},
-		{
-			MethodName: "Wait",
-			Handler:    _Task_Wait_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "github.com/containerd/containerd/runtime/v2/task/shim.proto",
-}
-
 func (m *CreateTaskRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2047,6 +1512,264 @@ func valueToStringShim(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
+}
+
+type TaskService interface {
+	State(ctx context.Context, req *StateRequest) (*StateResponse, error)
+	Create(ctx context.Context, req *CreateTaskRequest) (*CreateTaskResponse, error)
+	Start(ctx context.Context, req *StartRequest) (*StartResponse, error)
+	Delete(ctx context.Context, req *google_protobuf1.Empty) (*DeleteResponse, error)
+	DeleteProcess(ctx context.Context, req *DeleteProcessRequest) (*DeleteResponse, error)
+	Pids(ctx context.Context, req *PidsRequest) (*PidsResponse, error)
+	Pause(ctx context.Context, req *google_protobuf1.Empty) (*google_protobuf1.Empty, error)
+	Resume(ctx context.Context, req *google_protobuf1.Empty) (*google_protobuf1.Empty, error)
+	Checkpoint(ctx context.Context, req *CheckpointTaskRequest) (*google_protobuf1.Empty, error)
+	Kill(ctx context.Context, req *KillRequest) (*google_protobuf1.Empty, error)
+	Exec(ctx context.Context, req *ExecProcessRequest) (*google_protobuf1.Empty, error)
+	ResizePty(ctx context.Context, req *ResizePtyRequest) (*google_protobuf1.Empty, error)
+	CloseIO(ctx context.Context, req *CloseIORequest) (*google_protobuf1.Empty, error)
+	Update(ctx context.Context, req *UpdateTaskRequest) (*google_protobuf1.Empty, error)
+	Wait(ctx context.Context, req *WaitRequest) (*WaitResponse, error)
+}
+
+func RegisterTaskService(srv *ttrpc.Server, svc TaskService) {
+	srv.Register("containerd.task.v2.Task", map[string]ttrpc.Method{
+		"State": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req StateRequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.State(ctx, &req)
+		},
+		"Create": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req CreateTaskRequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.Create(ctx, &req)
+		},
+		"Start": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req StartRequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.Start(ctx, &req)
+		},
+		"Delete": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req google_protobuf1.Empty
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.Delete(ctx, &req)
+		},
+		"DeleteProcess": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req DeleteProcessRequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.DeleteProcess(ctx, &req)
+		},
+		"Pids": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req PidsRequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.Pids(ctx, &req)
+		},
+		"Pause": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req google_protobuf1.Empty
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.Pause(ctx, &req)
+		},
+		"Resume": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req google_protobuf1.Empty
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.Resume(ctx, &req)
+		},
+		"Checkpoint": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req CheckpointTaskRequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.Checkpoint(ctx, &req)
+		},
+		"Kill": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req KillRequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.Kill(ctx, &req)
+		},
+		"Exec": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req ExecProcessRequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.Exec(ctx, &req)
+		},
+		"ResizePty": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req ResizePtyRequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.ResizePty(ctx, &req)
+		},
+		"CloseIO": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req CloseIORequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.CloseIO(ctx, &req)
+		},
+		"Update": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req UpdateTaskRequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.Update(ctx, &req)
+		},
+		"Wait": func(ctx context.Context, unmarshal func(interface{}) error) (interface{}, error) {
+			var req WaitRequest
+			if err := unmarshal(&req); err != nil {
+				return nil, err
+			}
+			return svc.Wait(ctx, &req)
+		},
+	})
+}
+
+type taskClient struct {
+	client *ttrpc.Client
+}
+
+func NewTaskClient(client *ttrpc.Client) TaskService {
+	return &taskClient{
+		client: client,
+	}
+}
+
+func (c *taskClient) State(ctx context.Context, req *StateRequest) (*StateResponse, error) {
+	var resp StateResponse
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "State", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) Create(ctx context.Context, req *CreateTaskRequest) (*CreateTaskResponse, error) {
+	var resp CreateTaskResponse
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "Create", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) Start(ctx context.Context, req *StartRequest) (*StartResponse, error) {
+	var resp StartResponse
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "Start", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) Delete(ctx context.Context, req *google_protobuf1.Empty) (*DeleteResponse, error) {
+	var resp DeleteResponse
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "Delete", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) DeleteProcess(ctx context.Context, req *DeleteProcessRequest) (*DeleteResponse, error) {
+	var resp DeleteResponse
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "DeleteProcess", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) Pids(ctx context.Context, req *PidsRequest) (*PidsResponse, error) {
+	var resp PidsResponse
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "Pids", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) Pause(ctx context.Context, req *google_protobuf1.Empty) (*google_protobuf1.Empty, error) {
+	var resp google_protobuf1.Empty
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "Pause", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) Resume(ctx context.Context, req *google_protobuf1.Empty) (*google_protobuf1.Empty, error) {
+	var resp google_protobuf1.Empty
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "Resume", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) Checkpoint(ctx context.Context, req *CheckpointTaskRequest) (*google_protobuf1.Empty, error) {
+	var resp google_protobuf1.Empty
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "Checkpoint", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) Kill(ctx context.Context, req *KillRequest) (*google_protobuf1.Empty, error) {
+	var resp google_protobuf1.Empty
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "Kill", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) Exec(ctx context.Context, req *ExecProcessRequest) (*google_protobuf1.Empty, error) {
+	var resp google_protobuf1.Empty
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "Exec", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) ResizePty(ctx context.Context, req *ResizePtyRequest) (*google_protobuf1.Empty, error) {
+	var resp google_protobuf1.Empty
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "ResizePty", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) CloseIO(ctx context.Context, req *CloseIORequest) (*google_protobuf1.Empty, error) {
+	var resp google_protobuf1.Empty
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "CloseIO", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) Update(ctx context.Context, req *UpdateTaskRequest) (*google_protobuf1.Empty, error) {
+	var resp google_protobuf1.Empty
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "Update", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *taskClient) Wait(ctx context.Context, req *WaitRequest) (*WaitResponse, error) {
+	var resp WaitResponse
+	if err := c.client.Call(ctx, "containerd.task.v2.Task", "Wait", req, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
 }
 func (m *CreateTaskRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)

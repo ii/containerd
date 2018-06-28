@@ -4,29 +4,37 @@ import (
 	"context"
 	"os"
 
+	"github.com/containerd/containerd/events/exchange"
 	"github.com/containerd/containerd/runtime"
+	ptypes "github.com/gogo/protobuf/types"
 )
 
-func New(root, state string, monitor runtime.TaskMonitor) (*TaskManager, error) {
+var empty = &ptypes.Empty{}
+
+func New(root, state, containerdAddress string, monitor runtime.TaskMonitor, events *exchange.Exchange) (*TaskManager, error) {
 	for _, d := range []string{root, state} {
 		if err := os.MkdirAll(d, 0711); err != nil {
 			return nil, err
 		}
 	}
 	return &TaskManager{
-		root:    root,
-		state:   state,
-		monitor: monitor,
-		tasks:   runtime.NewTaskList(),
+		root:              root,
+		state:             state,
+		containerdAddress: containerdAddress,
+		monitor:           monitor,
+		tasks:             runtime.NewTaskList(),
+		events:            events,
 	}, nil
 }
 
 type TaskManager struct {
-	root  string
-	state string
+	root              string
+	state             string
+	containerdAddress string
 
 	monitor runtime.TaskMonitor
 	tasks   *runtime.TaskList
+	events  *exchange.Exchange
 }
 
 func (m *TaskManager) ID() string {
@@ -43,7 +51,7 @@ func (m *TaskManager) Create(ctx context.Context, id string, opts runtime.Create
 			bundle.Delete()
 		}
 	}()
-	shim, err := NewShim(ctx, bundle, opts.Runtime)
+	shim, err := NewShim(ctx, bundle, opts.Runtime, m.events)
 	if err != nil {
 		return err
 	}
@@ -78,7 +86,8 @@ func (m *TaskManager) Delete(ctx context.Context, task runtime.Task) (*runtime.E
 	if err := m.monitor.Stop(task); err != nil {
 		return nil, err
 	}
-	exit, err := task.Delete(ctx)
+	shim := task.(*Shim)
+	exit, err := shim.Delete(ctx)
 	if err != nil {
 		return nil, err
 	}
