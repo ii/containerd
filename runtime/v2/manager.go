@@ -2,9 +2,24 @@ package v2
 
 import (
 	"context"
+	"os"
 
 	"github.com/containerd/containerd/runtime"
 )
+
+func New(root, state string, monitor runtime.TaskMonitor) (*TaskManager, error) {
+	for _, d := range []string{root, state} {
+		if err := os.MkdirAll(d, 0711); err != nil {
+			return nil, err
+		}
+	}
+	return &TaskManager{
+		root:    root,
+		state:   state,
+		monitor: monitor,
+		tasks:   runtime.NewTaskList(),
+	}, nil
+}
 
 type TaskManager struct {
 	root  string
@@ -19,7 +34,7 @@ func (m *TaskManager) ID() string {
 }
 
 func (m *TaskManager) Create(ctx context.Context, id string, opts runtime.CreateOpts) (_ runtime.Task, err error) {
-	bundle, err := m.newBundle(ctx, id, opts.Spec.Value)
+	bundle, err := NewBundle(ctx, m.root, m.state, id, opts.Spec.Value)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +43,7 @@ func (m *TaskManager) Create(ctx context.Context, id string, opts runtime.Create
 			bundle.Delete()
 		}
 	}()
-	shim, err := m.newShim(bundle, opts.Runtime)
+	shim, err := NewShim(ctx, bundle, opts.Runtime)
 	if err != nil {
 		return err
 	}
@@ -37,13 +52,14 @@ func (m *TaskManager) Create(ctx context.Context, id string, opts runtime.Create
 			shim.Close()
 		}
 	}()
-	task, err := shim.Create(opts)
+	task, err := shim.Create(ctx, opts)
 	if err != nil {
 		return nil, err
 	}
 	if err := m.tasks.Add(ctx, task); err != nil {
 		return nil, err
 	}
+	// TODO: maybe not fail here?
 	if err := m.monitor.Monitor(task); err != nil {
 		return nil, err
 	}
@@ -68,15 +84,4 @@ func (m *TaskManager) Delete(ctx context.Context, task runtime.Task) (*runtime.E
 	}
 	m.tasks.Delete(ctx, task.ID())
 	return exit, nil
-}
-
-const shimBinaryFormat = "containerd-shim-%s"
-
-type Bundle struct {
-	Path string
-}
-
-// finding and exec'ing a new shim
-func (m *TaskManager) newShim(ctx context.Context, bundle *Bundle, runtime string) (*Shim, error) {
-
 }
